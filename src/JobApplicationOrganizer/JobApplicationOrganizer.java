@@ -5,6 +5,8 @@
 package JobApplicationOrganizer;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import java.awt.Color;
+import java.awt.FlowLayout;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import java.sql.Connection;
@@ -20,7 +22,11 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
+import org.tc33.jheatchart.HeatChart;
+import java.awt.Image;
 
 /**
  *
@@ -462,7 +468,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
         Date app_date;
         int[] array_pos;
         
-        int[][] date_array = new int[26][7];
+        double[][] date_array = new double[26][7];
         // Fill array with zeroes
         for (int week = 0; week < 26; week++) {
             for (int day = 0; day < 7; day++) {
@@ -484,6 +490,25 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
                 }
             }
             System.out.println(Arrays.deepToString(date_array));
+            
+            HeatChart heat_map = new HeatChart(date_array);
+            
+            heat_map.setTitle("Job Application Heatmap");
+            heat_map.setXAxisLabel("Days");
+            heat_map.setYAxisLabel("Weeks");
+            heat_map.setLowValueColour(Color.decode("#2B2448"));
+            heat_map.setHighValueColour(Color.decode("#FF1EBB"));
+            
+            Image rendered_map = heat_map.getChartImage();
+            
+            JFrame frame = new JFrame();
+            frame.getContentPane().setLayout(new FlowLayout());
+            frame.getContentPane().add(new JLabel(new ImageIcon(rendered_map)));
+            frame.pack();
+            frame.setVisible(true);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            
+            
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex);
         }
