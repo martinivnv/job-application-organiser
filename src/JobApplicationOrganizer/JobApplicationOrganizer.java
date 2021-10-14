@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
@@ -25,6 +26,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
     private static final String USERNAME = "root";
     private static final String PASSWORD = "d8QYk4Hh6F";
     private static final String DBCONN = "jdbc:mysql://localhost:3306/job_applications";
+    private static final SimpleDateFormat DATEFORMAT = new SimpleDateFormat("dd/MM/yyyy");  
     
     Connection sqlConn = null;
     PreparedStatement pst = null;
@@ -47,7 +49,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
     //==================================Function======================================
     public void updateDB() {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             sqlConn = DriverManager.getConnection(DBCONN, USERNAME, PASSWORD);
             pst = sqlConn.prepareStatement("select * from job_applications");
             
@@ -63,12 +65,12 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
                 Vector columnData = new Vector();
                 
                 for (i=1;i<=q;i++){
-                    columnData.add(rs.getShort("ID"));
-                    columnData.add(rs.getShort("Job Title"));
-                    columnData.add(rs.getShort("Company"));
-                    columnData.add(rs.getShort("Date"));
-                    columnData.add(rs.getShort("Status"));
-                    columnData.add(rs.getShort("Resume"));
+                    columnData.add(rs.getString("ID"));
+                    columnData.add(rs.getString("JobTitle"));
+                    columnData.add(rs.getString("Company"));
+                    columnData.add(rs.getString("ApplicationDate"));
+                    columnData.add(rs.getString("Status"));
+                    columnData.add(rs.getString("Resume"));
                 }
                 RecordTable.addRow(columnData);
             }
@@ -229,6 +231,11 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
         btnAdd.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnAdd.setForeground(new java.awt.Color(255, 255, 255));
         btnAdd.setText("Add");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
 
         btnUpdate.setBackground(new java.awt.Color(51, 102, 255));
         btnUpdate.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -446,6 +453,28 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
         statusBox.setSelectedIndex(0);
         resumeBox.setSelectedIndex(-1);
     }//GEN-LAST:event_btnResetActionPerformed
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            sqlConn = DriverManager.getConnection(DBCONN, USERNAME, PASSWORD);
+            pst = sqlConn.prepareStatement("insert into job_applications(JobTitle,Company,ApplicationDate,Status,Resume)value(?,?,?,?,?)");
+            
+            pst.setString(1, txtJobTitle.getText());
+            pst.setString(2, txtCompany.getText());
+            pst.setString(3, DATEFORMAT.format(dateChooser.getDate()));
+            pst.setString(4, (String)statusBox.getSelectedItem());
+            pst.setString(5, (String)resumeBox.getSelectedItem());
+            
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Record added!");
+            updateDB();
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(JobApplicationOrganizer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(JobApplicationOrganizer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnAddActionPerformed
 
     /**
      * @param args the command line arguments
