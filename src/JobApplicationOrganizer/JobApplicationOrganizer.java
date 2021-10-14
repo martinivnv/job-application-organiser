@@ -110,6 +110,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
         btnReset = new javax.swing.JButton();
         panelTitle = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
+        lblSignature = new javax.swing.JLabel();
         logo = new javax.swing.JLabel();
         panelButtons1 = new javax.swing.JPanel();
         btnExit = new javax.swing.JButton();
@@ -123,11 +124,12 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        panelMain.setBackground(new java.awt.Color(0, 204, 102));
+        panelMain.setBackground(new java.awt.Color(11, 3, 45));
 
-        panelInputOutput.setBackground(new java.awt.Color(204, 255, 204));
+        panelInputOutput.setBackground(new java.awt.Color(43, 36, 72));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Job Title:");
 
         txtJobTitle.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -138,6 +140,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
         });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Company:");
 
         txtCompany.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -145,9 +148,11 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
         dateChooser.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Application Date:");
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Status:");
 
         statusBox.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -183,6 +188,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
         jScrollPane1.setViewportView(dataTable);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Resume Version:");
 
         resumeBox.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -241,7 +247,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
-        panelButtons.setBackground(new java.awt.Color(0, 204, 102));
+        panelButtons.setBackground(new java.awt.Color(11, 3, 45));
 
         btnAdd.setBackground(new java.awt.Color(51, 102, 255));
         btnAdd.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -309,11 +315,15 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
                 .addGap(0, 22, Short.MAX_VALUE))
         );
 
-        panelTitle.setBackground(new java.awt.Color(0, 204, 102));
+        panelTitle.setBackground(new java.awt.Color(11, 3, 45));
 
         lblTitle.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblTitle.setText("JobBase");
+
+        lblSignature.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblSignature.setForeground(new java.awt.Color(255, 255, 255));
+        lblSignature.setText("© Martin Ivanov 2021");
 
         javax.swing.GroupLayout panelTitleLayout = new javax.swing.GroupLayout(panelTitle);
         panelTitle.setLayout(panelTitleLayout);
@@ -322,7 +332,9 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
             .addGroup(panelTitleLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblTitle)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblSignature, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         panelTitleLayout.setVerticalGroup(
             panelTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -330,11 +342,15 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblTitle)
                 .addContainerGap())
+            .addGroup(panelTitleLayout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(lblSignature)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/jobbase_logo.png"))); // NOI18N
 
-        panelButtons1.setBackground(new java.awt.Color(0, 204, 102));
+        panelButtons1.setBackground(new java.awt.Color(11, 3, 45));
 
         btnExit.setBackground(new java.awt.Color(255, 0, 0));
         btnExit.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -384,7 +400,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
                 .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jPanel1.setBackground(new java.awt.Color(0, 204, 102));
+        jPanel1.setBackground(new java.awt.Color(11, 3, 45));
 
         btnAddResume.setBackground(new java.awt.Color(153, 102, 255));
         btnAddResume.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -616,6 +632,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblSignature;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel logo;
     private javax.swing.JPanel panelButtons;
