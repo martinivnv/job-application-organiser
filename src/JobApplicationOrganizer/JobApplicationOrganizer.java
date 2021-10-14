@@ -73,7 +73,6 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
                     columnData.add(rs.getString("Company"));
                     columnData.add(rs.getString("ApplicationDate"));
                     columnData.add(rs.getString("Status"));
-                    columnData.add(rs.getString("Resume"));
                 }
                 RecordTable.addRow(columnData);
             }
@@ -101,8 +100,6 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
         statusBox = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         dataTable = new javax.swing.JTable();
-        jLabel5 = new javax.swing.JLabel();
-        resumeBox = new javax.swing.JComboBox<>();
         panelButtons = new javax.swing.JPanel();
         btnAdd = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
@@ -116,8 +113,6 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
         btnExit = new javax.swing.JButton();
         btnHeatmap = new javax.swing.JButton();
         btnSankey = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
-        btnAddResume = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("JobBase - Job Application Tracker");
@@ -168,11 +163,11 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Job Title", "Company", "Application Date", "Status", "Resume Version"
+                "ID", "Job Title", "Company", "Application Date", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -187,12 +182,6 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(dataTable);
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Resume Version:");
-
-        resumeBox.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-
         javax.swing.GroupLayout panelInputOutputLayout = new javax.swing.GroupLayout(panelInputOutput);
         panelInputOutput.setLayout(panelInputOutputLayout);
         panelInputOutputLayout.setHorizontalGroup(
@@ -204,12 +193,10 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
                         .addGroup(panelInputOutputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel4)
-                            .addComponent(jLabel5)
                             .addComponent(jLabel2)
                             .addComponent(jLabel1))
                         .addGap(55, 55, 55)
                         .addGroup(panelInputOutputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(resumeBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(statusBox, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(dateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtCompany, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -238,12 +225,8 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
                 .addGroup(panelInputOutputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(statusBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14)
-                .addGroup(panelInputOutputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(resumeBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
@@ -299,7 +282,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
                     .addComponent(btnAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnReset, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnReset, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE))
                 .addContainerGap())
         );
         panelButtonsLayout.setVerticalGroup(
@@ -400,27 +383,6 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
                 .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jPanel1.setBackground(new java.awt.Color(11, 3, 45));
-
-        btnAddResume.setBackground(new java.awt.Color(153, 102, 255));
-        btnAddResume.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnAddResume.setForeground(new java.awt.Color(255, 255, 255));
-        btnAddResume.setText("Add Resume");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnAddResume, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnAddResume, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
-        );
-
         javax.swing.GroupLayout panelMainLayout = new javax.swing.GroupLayout(panelMain);
         panelMain.setLayout(panelMainLayout);
         panelMainLayout.setHorizontalGroup(
@@ -437,9 +399,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
                         .addComponent(panelInputOutput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addGroup(panelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(panelButtons, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(panelButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(panelButtons1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(16, 16, 16))))
         );
@@ -454,9 +414,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
                 .addGroup(panelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(panelMainLayout.createSequentialGroup()
                         .addComponent(panelButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(panelButtons1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(panelInputOutput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(214, 214, 214))
@@ -493,7 +451,6 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
         txtCompany.setText("");
         dateChooser.setDateFormatString("");
         statusBox.setSelectedIndex(0);
-        resumeBox.setSelectedIndex(-1);
         selected_id = null;
     }//GEN-LAST:event_btnResetActionPerformed
 
@@ -501,13 +458,12 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             sqlConn = DriverManager.getConnection(DBCONN, USERNAME, PASSWORD);
-            pst = sqlConn.prepareStatement("insert into job_applications(JobTitle,Company,ApplicationDate,Status,Resume)value(?,?,?,?,?)");
+            pst = sqlConn.prepareStatement("insert into job_applications(JobTitle,Company,ApplicationDate,Status)value(?,?,?,?,?)");
             
             pst.setString(1, txtJobTitle.getText());
             pst.setString(2, txtCompany.getText());
             pst.setString(3, DATEFORMAT.format(dateChooser.getDate()));
             pst.setString(4, (String)statusBox.getSelectedItem());
-            pst.setString(5, (String)resumeBox.getSelectedItem());
             
             pst.executeUpdate();
             JOptionPane.showMessageDialog(this, "Record added!");
@@ -524,13 +480,12 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             sqlConn = DriverManager.getConnection(DBCONN, USERNAME, PASSWORD);
-            pst = sqlConn.prepareStatement("update job_applications set JobTitle = ?, Company = ?, ApplicationDate = ?, Status = ?, Resume = ? where ID = ?");
+            pst = sqlConn.prepareStatement("update job_applications set JobTitle = ?, Company = ?, ApplicationDate = ?, Status = ? where ID = ?");
             
             pst.setString(1, txtJobTitle.getText());
             pst.setString(2, txtCompany.getText());
             pst.setString(3, DATEFORMAT.format(dateChooser.getDate()));
             pst.setString(4, (String)statusBox.getSelectedItem());
-            pst.setString(5, (String)resumeBox.getSelectedItem());
             pst.setString(6, selected_id);
             
             pst.executeUpdate();
@@ -555,7 +510,6 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, ex);
         }
         statusBox.setSelectedItem((String)RecordTable.getValueAt(selectedRows, 4));
-        resumeBox.setSelectedItem((String)RecordTable.getValueAt(selectedRows, 5));
         selected_id = (String)RecordTable.getValueAt(selectedRows, 0);
     }//GEN-LAST:event_dataTableMouseClicked
 
@@ -616,7 +570,6 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
-    private javax.swing.JButton btnAddResume;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnHeatmap;
@@ -629,8 +582,6 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblSignature;
     private javax.swing.JLabel lblTitle;
@@ -640,7 +591,6 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
     private javax.swing.JPanel panelInputOutput;
     private javax.swing.JPanel panelMain;
     private javax.swing.JPanel panelTitle;
-    private javax.swing.JComboBox<String> resumeBox;
     private javax.swing.JComboBox<String> statusBox;
     private javax.swing.JTextField txtCompany;
     private javax.swing.JTextField txtJobTitle;
