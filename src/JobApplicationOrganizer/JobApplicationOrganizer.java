@@ -28,7 +28,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
     private static final String PASSWORD = "d8QYk4Hh6F";
     private static final String DBCONN = "jdbc:mysql://localhost:3306/job_applications";
     private static final SimpleDateFormat DATEFORMAT = new SimpleDateFormat("dd/MM/yyyy");  
-    private static String update_id = null; // GLOBAL VARIABLE BAD !!!!!!
+    private static String selected_id = null; // GLOBAL VARIABLE BAD !!!!!!
     
     Connection sqlConn = null;
     PreparedStatement pst = null;
@@ -267,6 +267,11 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
         btnDelete.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnDelete.setForeground(new java.awt.Color(255, 255, 255));
         btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         btnReset.setBackground(new java.awt.Color(51, 102, 255));
         btnReset.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -473,6 +478,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
         dateChooser.setDateFormatString("");
         statusBox.setSelectedIndex(0);
         resumeBox.setSelectedIndex(-1);
+        selected_id = null;
     }//GEN-LAST:event_btnResetActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
@@ -490,6 +496,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
             pst.executeUpdate();
             JOptionPane.showMessageDialog(this, "Record added!");
             updateDB();
+            selected_id = null;
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(JobApplicationOrganizer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -508,7 +515,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
             pst.setString(3, DATEFORMAT.format(dateChooser.getDate()));
             pst.setString(4, (String)statusBox.getSelectedItem());
             pst.setString(5, (String)resumeBox.getSelectedItem());
-            pst.setString(6, update_id);
+            pst.setString(6, selected_id);
             
             pst.executeUpdate();
             JOptionPane.showMessageDialog(this, "Record updated!");
@@ -533,8 +540,27 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
         }
         statusBox.setSelectedItem((String)RecordTable.getValueAt(selectedRows, 4));
         resumeBox.setSelectedItem((String)RecordTable.getValueAt(selectedRows, 5));
-        update_id = (String)RecordTable.getValueAt(selectedRows, 0);
+        selected_id = (String)RecordTable.getValueAt(selectedRows, 0);
     }//GEN-LAST:event_dataTableMouseClicked
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            sqlConn = DriverManager.getConnection(DBCONN, USERNAME, PASSWORD);
+            pst = sqlConn.prepareStatement("delete from job_applications where ID = ?");
+            
+            pst.setString(1, selected_id);
+            
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Record deleted!");
+            updateDB();
+            selected_id = null;
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(JobApplicationOrganizer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(JobApplicationOrganizer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
      * @param args the command line arguments
