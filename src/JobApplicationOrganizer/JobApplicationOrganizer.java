@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
@@ -27,6 +28,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
     private static final String PASSWORD = "d8QYk4Hh6F";
     private static final String DBCONN = "jdbc:mysql://localhost:3306/job_applications";
     private static final SimpleDateFormat DATEFORMAT = new SimpleDateFormat("dd/MM/yyyy");  
+    private static String update_id = null; // GLOBAL VARIABLE BAD !!!!!!
     
     Connection sqlConn = null;
     PreparedStatement pst = null;
@@ -38,6 +40,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
      */
     public JobApplicationOrganizer() {
         initComponents();
+        updateDB();
     }
 
     /**
@@ -160,9 +163,23 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Job Title", "Company", "Application Date", "Status", "Resume Version"
+                "ID", "Job Title", "Company", "Application Date", "Status", "Resume Version"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        dataTable.getTableHeader().setReorderingAllowed(false);
+        dataTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                dataTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(dataTable);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -178,8 +195,8 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(panelInputOutputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelInputOutputLayout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(26, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 668, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 18, Short.MAX_VALUE))
                     .addGroup(panelInputOutputLayout.createSequentialGroup()
                         .addGroup(panelInputOutputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
@@ -187,15 +204,14 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
                             .addComponent(jLabel5)
                             .addComponent(jLabel2)
                             .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(55, 55, 55)
                         .addGroup(panelInputOutputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInputOutputLayout.createSequentialGroup()
-                                .addComponent(resumeBox, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(87, 87, 87))
+                            .addComponent(resumeBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(statusBox, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(dateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtCompany, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtJobTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(txtJobTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         panelInputOutputLayout.setVerticalGroup(
             panelInputOutputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -241,6 +257,11 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
         btnUpdate.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
         btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
         btnDelete.setBackground(new java.awt.Color(51, 102, 255));
         btnDelete.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -420,7 +441,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
                 .addGap(223, 223, 223))
         );
 
-        getContentPane().add(panelMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 780, 520));
+        getContentPane().add(panelMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 920, 520));
 
         pack();
         setLocationRelativeTo(null);
@@ -475,6 +496,45 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(JobApplicationOrganizer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            sqlConn = DriverManager.getConnection(DBCONN, USERNAME, PASSWORD);
+            pst = sqlConn.prepareStatement("update job_applications set JobTitle = ?, Company = ?, ApplicationDate = ?, Status = ?, Resume = ? where ID = ?");
+            
+            pst.setString(1, txtJobTitle.getText());
+            pst.setString(2, txtCompany.getText());
+            pst.setString(3, DATEFORMAT.format(dateChooser.getDate()));
+            pst.setString(4, (String)statusBox.getSelectedItem());
+            pst.setString(5, (String)resumeBox.getSelectedItem());
+            pst.setString(6, update_id);
+            
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Record updated!");
+            updateDB();
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(JobApplicationOrganizer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(JobApplicationOrganizer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void dataTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dataTableMouseClicked
+        DefaultTableModel RecordTable = (DefaultTableModel)dataTable.getModel();
+        int selectedRows = dataTable.getSelectedRow();
+        
+        txtJobTitle.setText((String)RecordTable.getValueAt(selectedRows, 1));
+        txtCompany.setText((String)RecordTable.getValueAt(selectedRows, 2));
+        try {
+            dateChooser.setDate(DATEFORMAT.parse((String)RecordTable.getValueAt(selectedRows, 3)));
+        } catch (ParseException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        statusBox.setSelectedItem((String)RecordTable.getValueAt(selectedRows, 4));
+        resumeBox.setSelectedItem((String)RecordTable.getValueAt(selectedRows, 5));
+        update_id = (String)RecordTable.getValueAt(selectedRows, 0);
+    }//GEN-LAST:event_dataTableMouseClicked
 
     /**
      * @param args the command line arguments
