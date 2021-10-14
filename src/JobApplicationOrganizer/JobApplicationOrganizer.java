@@ -5,6 +5,8 @@
 package JobApplicationOrganizer;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -58,7 +60,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
         btnAddResume = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("JobBase - Job Application Organizer");
+        setTitle("JobBase - Job Application Tracker");
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -99,19 +101,16 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Job Title", "Company", "Application Date", "Status", "Resume Version"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel5.setText("Resume version:");
+        jLabel5.setText("Resume Version:");
 
         jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
@@ -249,6 +248,11 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
         btnExit.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnExit.setForeground(new java.awt.Color(255, 255, 255));
         btnExit.setText("Exit");
+        btnExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExitActionPerformed(evt);
+            }
+        });
 
         btnHeatmap.setBackground(new java.awt.Color(153, 0, 102));
         btnHeatmap.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -367,6 +371,14 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
     private void btnHeatmapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHeatmapActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnHeatmapActionPerformed
+
+    private JFrame frame;
+    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
+        frame = new JFrame("Exit");
+        if (JOptionPane.showConfirmDialog(frame, "Are you sure you want to exit?", "JobBase", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+            System.exit(0);
+        }
+    }//GEN-LAST:event_btnExitActionPerformed
 
     /**
      * @param args the command line arguments
