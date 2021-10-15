@@ -5,8 +5,10 @@
 package JobApplicationOrganizer;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Graphics2D;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import java.sql.Connection;
@@ -27,10 +29,12 @@ import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
 import org.tc33.jheatchart.HeatChart;
 import java.awt.Image;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Set;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.flow.FlowPlot;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.flow.DefaultFlowDataset;
 import org.jfree.data.flow.NodeKey;
@@ -601,7 +605,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
             pst.setString(2, txtCompany.getText());
             pst.setString(3, DATEFORMAT.format(dateChooser.getDate()));
             pst.setString(4, (String)statusBox.getSelectedItem());
-            pst.setString(6, selected_id);
+            pst.setString(5, selected_id);
             
             pst.executeUpdate();
             JOptionPane.showMessageDialog(this, "Record updated!");
@@ -845,7 +849,22 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
             dataset.setFlow(4, "Offer", "Declined Offer", tmp_value);
         }
         
-        System.out.println(dataset);
+        FlowPlot sankey_diagram = new FlowPlot(dataset);
+        displaySankey(sankey_diagram);
+    }
+    
+    private void displaySankey(FlowPlot sankey_diagram) {
+        BufferedImage image = new BufferedImage(1000 , 700, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2 = image.createGraphics();
+        sankey_diagram.draw(g2, new Rectangle2D.Double(0, 0, 1000, 700), null, null, null);
+        g2.dispose();
+        
+        JFrame frame = new JFrame("Sankey Diagram - Job Application Process");
+        frame.getContentPane().setLayout(new FlowLayout());
+        frame.getContentPane().add(new JLabel(new ImageIcon(image)));
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
         System.out.println("Done");
     }
     
@@ -898,11 +917,11 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
         BufferedImage rendered_chart = chart.createBufferedImage(width, height);
         
         JFrame frame = new JFrame("Job Titles - Pie Chart");
-            frame.getContentPane().setLayout(new FlowLayout());
-            frame.getContentPane().add(new JLabel(new ImageIcon(rendered_chart)));
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
+        frame.getContentPane().setLayout(new FlowLayout());
+        frame.getContentPane().add(new JLabel(new ImageIcon(rendered_chart)));
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
     
     /**
