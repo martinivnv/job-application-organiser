@@ -32,6 +32,10 @@ import java.util.Set;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.flow.DefaultFlowDataset;
+import org.jfree.data.flow.NodeKey;
+import org.jfree.data.flow.FlowKey;
+
 
 /**
  *
@@ -662,6 +666,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
                         statuses.put(current_status, 1);
                     }
                 }
+                System.out.println(statuses);
                 generateSankey(statuses);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, ex);
@@ -669,7 +674,179 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSankeyActionPerformed
 
     private void generateSankey(HashMap statuses) {
+        DefaultFlowDataset dataset = new DefaultFlowDataset( );
+        JFreeChart chart;
+        double tmp_value, tmp_flow;
         
+        // Stage 0
+        if (statuses.containsKey("No Response Yet")) {
+            dataset.setFlow(0, "Applications Sent", "No Response", (double)(Integer)statuses.get("No Response Yet"));
+        }
+        if (statuses.containsKey("Rejected")) {
+            dataset.setFlow(0, "Applications Sent", "Rejected", (double)(Integer)statuses.get("Rejected"));
+        }
+        if (statuses.containsKey("Phone Screening")) {
+            dataset.setFlow(0, "Applications Sent", "Phone Screening", (double)(Integer)statuses.get("Phone Screening"));
+        }
+        // Stage 1
+        if (statuses.containsKey("Phone Screening Rejection")) {
+            tmp_value = (double)(Integer)statuses.get("Phone Screening Rejection");
+            if (dataset.getFlow(0, "Applications Sent", "Phone Screening") != null) {
+                tmp_flow = dataset.getFlow(0, "Applications Sent", "Phone Screening").doubleValue();
+                dataset.setFlow(0, "Applications Sent", "Phone Screening", tmp_flow + tmp_value);
+            } else {
+                dataset.setFlow(0, "Applications Sent", "Phone Screening", tmp_value);
+            }
+            dataset.setFlow(1, "Phone Screening", "Phone Screening Rejection", tmp_value);
+        }
+        if (statuses.containsKey("1st Round Interview")) {
+            tmp_value = (double)(Integer)statuses.get("1st Round Interview");
+            if (dataset.getFlow(0, "Applications Sent", "Phone Screening") != null) {
+                tmp_flow = dataset.getFlow(0, "Applications Sent", "Phone Screening").doubleValue();
+                dataset.setFlow(0, "Applications Sent", "Phone Screening", tmp_flow + tmp_value);
+            } else {
+                dataset.setFlow(0, "Applications Sent", "Phone Screening", tmp_value);
+            }
+            dataset.setFlow(1, "Phone Screening", "1st Round Interview", tmp_value);
+        }
+        // Stage 2
+        if (statuses.containsKey("1st Round Rejection")) {
+            tmp_value = (double)(Integer)statuses.get("1st Round Rejection");          
+            if (dataset.getFlow(0, "Applications Sent", "Phone Screening") != null) {
+                tmp_flow = dataset.getFlow(0, "Applications Sent", "Phone Screening").doubleValue();
+                dataset.setFlow(0, "Applications Sent", "Phone Screening", tmp_flow + tmp_value);
+            } else {
+                dataset.setFlow(0, "Applications Sent", "Phone Screening", tmp_value);
+            }
+            if (dataset.getFlow(1, "Phone Screening", "1st Round Interview") != null) {
+                tmp_flow = dataset.getFlow(1, "Phone Screening", "1st Round Interview").doubleValue();
+                dataset.setFlow(1, "Phone Screening", "1st Round Interview", tmp_flow + tmp_value);
+            } else {
+                dataset.setFlow(1, "Phone Screening", "1st Round Interview", tmp_value);
+            }
+            dataset.setFlow(2, "1st Round Interview", "1st Round Rejection", tmp_value);
+        }
+        if (statuses.containsKey("2nd Round Interview")) {
+            tmp_value = (double)(Integer)statuses.get("2nd Round Interview");
+            if (dataset.getFlow(0, "Applications Sent", "Phone Screening") != null) {
+                tmp_flow = dataset.getFlow(0, "Applications Sent", "Phone Screening").doubleValue();
+                dataset.setFlow(0, "Applications Sent", "Phone Screening", tmp_flow + tmp_value);
+            } else {
+                dataset.setFlow(0, "Applications Sent", "Phone Screening", tmp_value);
+            }
+            if (dataset.getFlow(1, "Phone Screening", "1st Round Interview") != null) {
+                tmp_flow = dataset.getFlow(1, "Phone Screening", "1st Round Interview").doubleValue();
+                dataset.setFlow(1, "Phone Screening", "1st Round Interview", tmp_flow + tmp_value);
+            } else {
+                dataset.setFlow(1, "Phone Screening", "1st Round Interview", tmp_value);
+            }
+            dataset.setFlow(2, "1st Round Interview", "2nd Round Interview", tmp_value);
+        }
+        // Stage 3
+        if (statuses.containsKey("2nd Round Rejection")) {
+            tmp_value = (double)(Integer)statuses.get("2nd Round Rejection");
+            if (dataset.getFlow(0, "Applications Sent", "Phone Screening") != null) {
+                tmp_flow = dataset.getFlow(0, "Applications Sent", "Phone Screening").doubleValue();
+                dataset.setFlow(0, "Applications Sent", "Phone Screening", tmp_flow + tmp_value);
+            } else {
+                dataset.setFlow(0, "Applications Sent", "Phone Screening", tmp_value);
+            }
+            if (dataset.getFlow(1, "Phone Screening", "1st Round Interview") != null) {
+                tmp_flow = dataset.getFlow(1, "Phone Screening", "1st Round Interview").doubleValue();
+                dataset.setFlow(1, "Phone Screening", "1st Round Interview", tmp_flow + tmp_value);
+            } else {
+                dataset.setFlow(1, "Phone Screening", "1st Round Interview", tmp_value);
+            }
+            if (dataset.getFlow(2, "1st Round Interview", "2nd Round Interview") != null) {
+                tmp_flow = dataset.getFlow(2, "1st Round Interview", "2nd Round Interview").doubleValue();
+                dataset.setFlow(2, "1st Round Interview", "2nd Round Interview", tmp_flow + tmp_value);
+            } else {
+                dataset.setFlow(2, "1st Round Interview", "2nd Round Interview", tmp_value);
+            }
+            dataset.setFlow(3, "2nd Round Interview", "2nd Round Rejection", tmp_value);
+        }
+        if (statuses.containsKey("Offer")) {
+            tmp_value = (double)(Integer)statuses.get("Offer");
+            if (dataset.getFlow(0, "Applications Sent", "Phone Screening") != null) {
+                tmp_flow = dataset.getFlow(0, "Applications Sent", "Phone Screening").doubleValue();
+                dataset.setFlow(0, "Applications Sent", "Phone Screening", tmp_flow + tmp_value);
+            } else {
+                dataset.setFlow(0, "Applications Sent", "Phone Screening", tmp_value);
+            }
+            if (dataset.getFlow(1, "Phone Screening", "1st Round Interview") != null) {
+                tmp_flow = dataset.getFlow(1, "Phone Screening", "1st Round Interview").doubleValue();
+                dataset.setFlow(1, "Phone Screening", "1st Round Interview", tmp_flow + tmp_value);
+            } else {
+                dataset.setFlow(1, "Phone Screening", "1st Round Interview", tmp_value);
+            }
+            if (dataset.getFlow(2, "1st Round Interview", "2nd Round Interview") != null) {
+                tmp_flow = dataset.getFlow(2, "1st Round Interview", "2nd Round Interview").doubleValue();
+                dataset.setFlow(2, "1st Round Interview", "2nd Round Interview", tmp_flow + tmp_value);
+            } else {
+                dataset.setFlow(2, "1st Round Interview", "2nd Round Interview", tmp_value);
+            }
+            dataset.setFlow(3, "2nd Round Interview", "Offer", tmp_value);
+        }
+        // Stage 4
+        if (statuses.containsKey("Accepted Offer")) {
+            tmp_value = (double)(Integer)statuses.get("Accepted Offer");
+            if (dataset.getFlow(0, "Applications Sent", "Phone Screening") != null) {
+                tmp_flow = dataset.getFlow(0, "Applications Sent", "Phone Screening").doubleValue();
+                dataset.setFlow(0, "Applications Sent", "Phone Screening", tmp_flow + tmp_value);
+            } else {
+                dataset.setFlow(0, "Applications Sent", "Phone Screening", tmp_value);
+            }
+            if (dataset.getFlow(1, "Phone Screening", "1st Round Interview") != null) {
+                tmp_flow = dataset.getFlow(1, "Phone Screening", "1st Round Interview").doubleValue();
+                dataset.setFlow(1, "Phone Screening", "1st Round Interview", tmp_flow + tmp_value);
+            } else {
+                dataset.setFlow(1, "Phone Screening", "1st Round Interview", tmp_value);
+            }
+            if (dataset.getFlow(2, "1st Round Interview", "2nd Round Interview") != null) {
+                tmp_flow = dataset.getFlow(2, "1st Round Interview", "2nd Round Interview").doubleValue();
+                dataset.setFlow(2, "1st Round Interview", "2nd Round Interview", tmp_flow + tmp_value);
+            } else {
+                dataset.setFlow(2, "1st Round Interview", "2nd Round Interview", tmp_value);
+            }
+            if (dataset.getFlow(3, "2nd Round Interview", "Offer") != null) {
+                tmp_flow = dataset.getFlow(3, "2nd Round Interview", "Offer").doubleValue();
+                dataset.setFlow(3, "2nd Round Interview", "Offer", tmp_flow + tmp_value);
+            } else {
+                dataset.setFlow(3, "2nd Round Interview", "Offer", tmp_value);
+            }
+            dataset.setFlow(4, "Offer", "Accepted Offer", tmp_value);
+        }
+        if (statuses.containsKey("Declined Offer")) {
+            tmp_value = (double)(Integer)statuses.get("Declined Offer");
+            if (dataset.getFlow(0, "Applications Sent", "Phone Screening") != null) {
+                tmp_flow = dataset.getFlow(0, "Applications Sent", "Phone Screening").doubleValue();
+                dataset.setFlow(0, "Applications Sent", "Phone Screening", tmp_flow + tmp_value);
+            } else {
+                dataset.setFlow(0, "Applications Sent", "Phone Screening", tmp_value);
+            }
+            if (dataset.getFlow(1, "Phone Screening", "1st Round Interview") != null) {
+                tmp_flow = dataset.getFlow(1, "Phone Screening", "1st Round Interview").doubleValue();
+                dataset.setFlow(1, "Phone Screening", "1st Round Interview", tmp_flow + tmp_value);
+            } else {
+                dataset.setFlow(1, "Phone Screening", "1st Round Interview", tmp_value);
+            }
+            if (dataset.getFlow(2, "1st Round Interview", "2nd Round Interview") != null) {
+                tmp_flow = dataset.getFlow(2, "1st Round Interview", "2nd Round Interview").doubleValue();
+                dataset.setFlow(2, "1st Round Interview", "2nd Round Interview", tmp_flow + tmp_value);
+            } else {
+                dataset.setFlow(2, "1st Round Interview", "2nd Round Interview", tmp_value);
+            }
+            if (dataset.getFlow(3, "2nd Round Interview", "Offer") != null) {
+                tmp_flow = dataset.getFlow(3, "2nd Round Interview", "Offer").doubleValue();
+                dataset.setFlow(3, "2nd Round Interview", "Offer", tmp_flow + tmp_value);
+            } else {
+                dataset.setFlow(3, "2nd Round Interview", "Offer", tmp_value);
+            }
+            dataset.setFlow(4, "Offer", "Declined Offer", tmp_value);
+        }
+        
+        System.out.println(dataset);
+        System.out.println("Done");
     }
     
     private void btnPieChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPieChartActionPerformed
