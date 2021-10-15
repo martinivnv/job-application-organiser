@@ -570,7 +570,6 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
         txtJobTitle.setText("");
         txtCompany.setText("");
-        dateChooser.setDateFormatString("");
         statusBox.setSelectedIndex(0);
         selected_id = null;
     }//GEN-LAST:event_btnResetActionPerformed
