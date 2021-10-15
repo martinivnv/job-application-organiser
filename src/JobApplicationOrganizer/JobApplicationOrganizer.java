@@ -644,9 +644,34 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnSankeyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSankeyActionPerformed
+        HashMap<String, Integer> statuses = new HashMap<String, Integer>();
+        String current_status;
         
+        try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                sqlConn = DriverManager.getConnection(DBCONN, USERNAME, PASSWORD);
+                pst = sqlConn.prepareStatement("select Status from job_applications");
+
+                rs = pst.executeQuery();
+
+                while(rs.next()) {
+                    current_status = rs.getString(1);
+                    if (statuses.containsKey(current_status)) {
+                        statuses.put(current_status, statuses.get(current_status) + 1);
+                    } else {
+                        statuses.put(current_status, 1);
+                    }
+                }
+                generateSankey(statuses);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex);
+        }
     }//GEN-LAST:event_btnSankeyActionPerformed
 
+    private void generateSankey(HashMap statuses) {
+        
+    }
+    
     private void btnPieChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPieChartActionPerformed
         HashMap<String, Integer> job_titles = new HashMap<String, Integer>();
         String current_title;
