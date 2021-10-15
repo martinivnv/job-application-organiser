@@ -18,7 +18,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
@@ -27,6 +27,10 @@ import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
 import org.tc33.jheatchart.HeatChart;
 import java.awt.Image;
+import org.jfree.chart.ChartUtils;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.general.DefaultPieDataset;
 
 /**
  *
@@ -121,6 +125,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
         logo = new javax.swing.JLabel();
         panelDiagrams = new javax.swing.JPanel();
         btnHeatmap = new javax.swing.JButton();
+        btnPieChart = new javax.swing.JButton();
         btnSankey = new javax.swing.JButton();
         panelExit = new javax.swing.JPanel();
         btnExit = new javax.swing.JButton();
@@ -354,10 +359,25 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
             }
         });
 
+        btnPieChart.setBackground(new java.awt.Color(153, 0, 102));
+        btnPieChart.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnPieChart.setForeground(new java.awt.Color(255, 255, 255));
+        btnPieChart.setText("Pie Chart");
+        btnPieChart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPieChartActionPerformed(evt);
+            }
+        });
+
         btnSankey.setBackground(new java.awt.Color(153, 0, 102));
         btnSankey.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnSankey.setForeground(new java.awt.Color(255, 255, 255));
         btnSankey.setText("Sankey Diagram");
+        btnSankey.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSankeyActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelDiagramsLayout = new javax.swing.GroupLayout(panelDiagrams);
         panelDiagrams.setLayout(panelDiagramsLayout);
@@ -366,17 +386,19 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
             .addGroup(panelDiagramsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelDiagramsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnSankey, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnHeatmap, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnHeatmap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnPieChart, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnSankey, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         panelDiagramsLayout.setVerticalGroup(
             panelDiagramsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelDiagramsLayout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(btnHeatmap, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSankey, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnPieChart, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -461,16 +483,17 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
     }//GEN-LAST:event_statusBoxActionPerformed
 
     private void btnHeatmapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHeatmapActionPerformed
+        int num_weeks = 20;
         Calendar cal = Calendar.getInstance();
         Date today_date = cal.getTime();
-        cal.add(Calendar.WEEK_OF_YEAR, -26);
+        cal.add(Calendar.WEEK_OF_YEAR, -num_weeks);
         Date start_date = cal.getTime();
         Date app_date;
         int[] array_pos;
         
-        double[][] date_array = new double[26][7];
+        double[][] date_array = new double[num_weeks][7];
         // Fill array with zeroes
-        for (int week = 0; week < 26; week++) {
+        for (int week = 0; week < num_weeks; week++) {
             for (int day = 0; day < 7; day++) {
                 date_array[week][day] = 0;
             }
@@ -489,24 +512,24 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
                     date_array[array_pos[0]][array_pos[1]] += 1;
                 }
             }
-            System.out.println(Arrays.deepToString(date_array));
             
             HeatChart heat_map = new HeatChart(date_array);
             
-            heat_map.setTitle("Job Application Heatmap");
+            heat_map.setTitle("Activity - Past 20 Weeks");
             heat_map.setXAxisLabel("Days");
             heat_map.setYAxisLabel("Weeks");
+            heat_map.setYAxisValuesFrequency(2);
             heat_map.setLowValueColour(Color.decode("#2B2448"));
-            heat_map.setHighValueColour(Color.decode("#FF1EBB"));
+            heat_map.setHighValueColour(Color.decode("#FF0AAB"));
             
             Image rendered_map = heat_map.getChartImage();
             
-            JFrame frame = new JFrame();
+            JFrame frame = new JFrame("Heatmap");
             frame.getContentPane().setLayout(new FlowLayout());
             frame.getContentPane().add(new JLabel(new ImageIcon(rendered_map)));
             frame.pack();
+            frame.setLocationRelativeTo(null);
             frame.setVisible(true);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             
             
         } catch (Exception ex) {
@@ -545,7 +568,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             sqlConn = DriverManager.getConnection(DBCONN, USERNAME, PASSWORD);
-            pst = sqlConn.prepareStatement("insert into job_applications(JobTitle,Company,ApplicationDate,Status)value(?,?,?,?,?)");
+            pst = sqlConn.prepareStatement("insert into job_applications(JobTitle,Company,ApplicationDate,Status)value(?,?,?,?)");
             
             pst.setString(1, txtJobTitle.getText());
             pst.setString(2, txtCompany.getText());
@@ -619,32 +642,39 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
+    private void btnSankeyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSankeyActionPerformed
+        
+    }//GEN-LAST:event_btnSankeyActionPerformed
+
+    private void btnPieChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPieChartActionPerformed
+        Hashtable<String, Integer> job_titles = new Hashtable<String, Integer>();
+        String current_title;
+        
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            sqlConn = DriverManager.getConnection(DBCONN, USERNAME, PASSWORD);
+            pst = sqlConn.prepareStatement("select JobTitle from job_applications");
+            
+            rs = pst.executeQuery();
+            
+            while(rs.next()) {
+                current_title = rs.getString(1);
+                if (job_titles.containsKey(current_title)) {
+                    job_titles.put(current_title, job_titles.get(current_title) + 1);
+                } else {
+                    job_titles.put(current_title, 1);
+                }
+            }
+            System.out.println(job_titles);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }//GEN-LAST:event_btnPieChartActionPerformed
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(JobApplicationOrganizer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(JobApplicationOrganizer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(JobApplicationOrganizer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(JobApplicationOrganizer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
 
          FlatLightLaf.setup();
         /* Create and display the form */
@@ -660,6 +690,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnHeatmap;
+    private javax.swing.JButton btnPieChart;
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSankey;
     private javax.swing.JButton btnUpdate;
