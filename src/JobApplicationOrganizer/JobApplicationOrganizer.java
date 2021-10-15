@@ -29,8 +29,10 @@ import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
 import org.tc33.jheatchart.HeatChart;
 import java.awt.Image;
+import java.util.List;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 import java.util.Set;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -413,7 +415,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
 
         panelExit.setBackground(new java.awt.Color(0, 0, 51));
 
-        btnExit.setBackground(new java.awt.Color(255, 0, 0));
+        btnExit.setBackground(new java.awt.Color(255, 51, 51));
         btnExit.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnExit.setForeground(new java.awt.Color(255, 255, 255));
         btnExit.setText("Exit");
@@ -854,9 +856,14 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
     }
     
     private void displaySankey(FlowPlot sankey_diagram) {
-        BufferedImage image = new BufferedImage(1000 , 700, BufferedImage.TYPE_INT_RGB);
+        Color[] colors = new Color[]{Color.decode("#d5a6bd"), Color.decode("#cfe2f3"), Color.decode("#f26d21"), Color.decode("#674ea7"), Color.decode("#f15454"),
+            Color.decode("#93c47d"), Color.decode("#ffc30f"), Color.decode("#a34c89"), Color.decode("#6fa8dc"), Color.decode("#9f2042")};
+        List<Color> colors_list = Arrays.asList(colors);
+        sankey_diagram.setNodeColorSwatch(colors_list);
+        
+        BufferedImage image = new BufferedImage(1300 , 700, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2 = image.createGraphics();
-        sankey_diagram.draw(g2, new Rectangle2D.Double(0, 0, 1000, 700), null, null, null);
+        sankey_diagram.draw(g2, new Rectangle2D.Double(0, 0, 1300, 700), null, null, null);
         g2.dispose();
         
         JFrame frame = new JFrame("Sankey Diagram - Job Application Process");
