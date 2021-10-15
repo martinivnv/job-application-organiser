@@ -18,7 +18,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
@@ -27,7 +27,8 @@ import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
 import org.tc33.jheatchart.HeatChart;
 import java.awt.Image;
-import org.jfree.chart.ChartUtils;
+import java.awt.image.BufferedImage;
+import java.util.Set;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
@@ -524,7 +525,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
             
             Image rendered_map = heat_map.getChartImage();
             
-            JFrame frame = new JFrame("Heatmap");
+            JFrame frame = new JFrame("Job Application Heatmap");
             frame.getContentPane().setLayout(new FlowLayout());
             frame.getContentPane().add(new JLabel(new ImageIcon(rendered_map)));
             frame.pack();
@@ -647,7 +648,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSankeyActionPerformed
 
     private void btnPieChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPieChartActionPerformed
-        Hashtable<String, Integer> job_titles = new Hashtable<String, Integer>();
+        HashMap<String, Integer> job_titles = new HashMap<String, Integer>();
         String current_title;
         
         try {
@@ -665,12 +666,43 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
                     job_titles.put(current_title, 1);
                 }
             }
-            System.out.println(job_titles);
+            generatePieChart(job_titles);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex);
         }
     }//GEN-LAST:event_btnPieChartActionPerformed
 
+    private void generatePieChart(HashMap job_titles) {
+        DefaultPieDataset dataset = new DefaultPieDataset( );
+        Set<String> job_set = job_titles.keySet();
+        int frequency, width, height; 
+        JFreeChart chart;
+        
+        for (String job_name : job_set) {
+            frequency = (int)job_titles.get(job_name);
+            dataset.setValue(job_name, frequency);
+        }
+        
+        chart = ChartFactory.createPieChart(
+         "Job Titles By Frequency",   // chart title
+         dataset,          // data
+         true,             // include legend
+         true,
+         false);
+        
+        width = 640; 
+        height = 480;
+        
+        BufferedImage rendered_chart = chart.createBufferedImage(width, height);
+        
+        JFrame frame = new JFrame("Job Titles - Pie Chart");
+            frame.getContentPane().setLayout(new FlowLayout());
+            frame.getContentPane().add(new JLabel(new ImageIcon(rendered_chart)));
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+    }
+    
     /**
      * @param args the command line arguments
      */
