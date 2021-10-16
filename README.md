@@ -68,7 +68,7 @@
   </ol>
 </details>
 
-## Screenshots (*Data used is not real*)
+## Screenshots (*Note: Using made-up data*)
 <p align="center">
     <img src="screenshots/screenshot1.PNG" alt="screenshot1" width="600" >
     <p align="center">
