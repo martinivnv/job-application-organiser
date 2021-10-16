@@ -68,27 +68,27 @@
   </ol>
 </details>
 
-## Screenshots
+## Screenshots (*Data used is not real*)
 <p align="center">
-    <img src="myresources/screenshot1.PNG" alt="screenshot1" width="600" >
+    <img src="screenshots/screenshot1.PNG" alt="screenshot1" width="600" >
     <p align="center">
       Figure 1: Main screen
     </p>
     <br>
     <p align="center">
-      <img src="myresources/screenshot2.PNG" alt="screenshot2" width="600" >
+      <img src="screenshots/screenshot2.PNG" alt="screenshot2" width="600" >
       <p align="center">
         Figure 2: Heatmap
       </p>
     </p>
     <p align="center">
-      <img src="myresources/screenshot3.PNG" alt="screenshot3" width="600" >
+      <img src="screenshots/screenshot3.PNG" alt="screenshot3" width="600" >
       <p align="center">
         Figure 3: Sankey Diagram
       </p>
     </p>
     <p align="center">
-      <img src="myresources/screenshot4.PNG" alt="screenshot4" width="600" >
+      <img src="screenshots/screenshot4.PNG" alt="screenshot4" width="600" >
       <p align="center">
         Figure 4: Pie Chart
       </p>
