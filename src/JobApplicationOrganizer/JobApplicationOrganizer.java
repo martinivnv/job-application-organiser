@@ -494,7 +494,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
     }//GEN-LAST:event_statusBoxActionPerformed
 
     private void btnHeatmapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHeatmapActionPerformed
-        int num_weeks = 20;
+        int num_weeks = 16;
         Calendar cal = Calendar.getInstance();
         Date today_date = cal.getTime();
         cal.add(Calendar.WEEK_OF_YEAR, -num_weeks);
@@ -526,7 +526,7 @@ public class JobApplicationOrganizer extends javax.swing.JFrame {
             
             HeatChart heat_map = new HeatChart(date_array);
             
-            heat_map.setTitle("Activity - Past 20 Weeks");
+            heat_map.setTitle("Activity - Past 16 Weeks");
             heat_map.setXAxisLabel("Days");
             heat_map.setYAxisLabel("Weeks");
             heat_map.setYAxisValuesFrequency(2);
