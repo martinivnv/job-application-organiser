@@ -93,6 +93,12 @@
         Figure 4: Pie Chart
       </p>
     </p>
+    <p align="center">
+      <img src="screenshots/screenshot5.PNG" alt="screenshot5" width="600" >
+      <p align="center">
+        Figure 5: MySQL database
+      </p>
+    </p>
 </p>
 
 <!-- ABOUT THE PROJECT -->
